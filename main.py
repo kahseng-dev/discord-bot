@@ -1,6 +1,7 @@
 import os
 import discord
 import webserver
+import asyncio
 from dotenv import load_dotenv
 from discord import app_commands
 from discord.ext.commands import Bot
@@ -9,7 +10,7 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 command_prefix = "!"
-bot = Bot(command_prefix, intents=discord.Intents.all())
+bot = Bot(command_prefix, intents=discord.Intents.default())
 
 @bot.event
 async def on_ready():
