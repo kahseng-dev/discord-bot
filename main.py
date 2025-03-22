@@ -2,11 +2,13 @@ import os
 import discord
 import webserver
 import asyncio
+import logging
 from dotenv import load_dotenv
 from discord import app_commands
 from discord.ext.commands import Bot
 
 load_dotenv()
+log = logging.getLogger(__name__)
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 command_prefix = "!"
@@ -17,12 +19,12 @@ bot = Bot(command_prefix, intents=intents)
 @bot.event
 async def on_ready():
     try:
-        print(f"[SUCCESS]: {bot.user} is online")
+        log.info(f"[SUCCESS]: {bot.user} is online")
         for server in bot.guilds:
             await bot.tree.sync(guild=discord.Object(id=server.id))
-            print(f"[SUCCESS]: Synced commands.")
+            log.info(f"[SUCCESS]: Synced commands.")
     except Exception as error:
-        print(f"[ERROR]: {error}")
+        log.error(f"[ERROR]: {error}")
 
 @bot.tree.command(name = "ping", description = "Checks ping")
 async def ping(interaction):
