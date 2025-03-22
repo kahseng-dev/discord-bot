@@ -15,3 +15,21 @@ DISCORD_TOKEN=""
 HOST_EMAIL=""
 HOST_PASSWORD=""
 ```
+
+Discord Permissions
+OAuth2 URL Generator
+```
+- bot
+- applications.commands
+```
+
+Bot Permissions
+```
+- Send Messages
+- Use Slash Commands
+```
+
+Privileged Gateway Intents
+```
+- Message Content Intent
+```
