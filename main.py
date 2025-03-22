@@ -31,7 +31,15 @@ async def ping(interaction):
 
 @bot.tree.command(name = "start", description = "Starts minecraft server when it is offline")
 async def start(interaction):
-    await interaction.response.send_message(f"[SUCCESS]: Its working!")
+    await interaction.response.send_message(f"[INFO]: Not implemented yet")
+
+@bot.tree.command(name = "status", description = "Display minecraft server status")
+async def status(interaction):
+    await interaction.response.send_message(f"[INFO]: Not implemented yet")
+
+@bot.tree.command(name = "server-info", description = "Minecraft server information")
+async def server_info(interaction):
+    await interaction.response.send_message(f"[INFO]: Not implemented yet")
 
 webserver.keep_awake()
 bot.run(DISCORD_TOKEN)
