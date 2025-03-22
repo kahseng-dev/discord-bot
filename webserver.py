@@ -14,6 +14,5 @@ def run():
     app.run(host, port)
 
 def keep_awake():
-    target = run
-    thread = Thread(target)
+    thread = Thread(target=run)
     thread.start()
