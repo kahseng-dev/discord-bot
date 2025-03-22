@@ -24,7 +24,7 @@ async def on_ready():
         print(f"[ERROR]: {error}")
 
 @tree.command(name = "ping", description = "Checks ping")
-async def start(interaction):
+async def ping(interaction):
     await interaction.response.send_message(f"[SUCCESS]: Pong!")
 
 @tree.command(name = "start", description = "Starts minecraft server when it is offline")
