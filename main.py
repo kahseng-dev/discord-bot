@@ -20,8 +20,8 @@ bot = Bot(command_prefix, intents=intents)
 async def on_ready():
     try:
         log.info(f"[SUCCESS]: {bot.user} is online")
-        bot.tree.sync()
-        log.info(f"[SUCCESS]: Synced commands.")
+        await bot.tree.sync()
+        await log.info(f"[SUCCESS]: Synced commands.")
     except Exception as error:
         log.error(f"[ERROR]: {error}")
 
