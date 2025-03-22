@@ -1,5 +1,6 @@
 import os
 import discord
+import webserver
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -21,4 +22,5 @@ async def say_working(interaction: discord.Interaction):
     username = interaction.user.mention
     await interaction.response.send_message(f"Its working!, {username}")
 
+webserver.keep_awake()
 bot.run(DISCORD_TOKEN)
