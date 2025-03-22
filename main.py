@@ -3,31 +3,29 @@ import discord
 import webserver
 from dotenv import load_dotenv
 from discord import app_commands
-from discord.ext import commands
+from discord.ext.commands import Bot
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 command_prefix = "!"
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix, intents=intents)
-tree = app_commands.CommandTree(bot)
+bot = Bot(command_prefix, intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
     try:
         print(f"[SUCCESS]: {bot.user} is online")
-        await bot.tree.sync()
-        print(f"[SUCCESS]: Synced commands.")
+        for server in bot.guilds:
+            await bot.tree.sync(guild=discord.Object(id=server.id))
+            print(f"[SUCCESS]: Synced commands.")
     except Exception as error:
         print(f"[ERROR]: {error}")
 
-@tree.command(name = "ping", description = "Checks ping")
+@bot.tree.command(name = "ping", description = "Checks ping")
 async def ping(interaction):
     await interaction.response.send_message(f"[SUCCESS]: Pong!")
 
-@tree.command(name = "start", description = "Starts minecraft server when it is offline")
+@bot.tree.command(name = "start", description = "Starts minecraft server when it is offline")
 async def start(interaction):
     await interaction.response.send_message(f"[SUCCESS]: Its working!")
 
