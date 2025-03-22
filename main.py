@@ -20,9 +20,8 @@ bot = Bot(command_prefix, intents=intents)
 async def on_ready():
     try:
         log.info(f"[SUCCESS]: {bot.user} is online")
-        for server in bot.guilds:
-            await bot.tree.sync(guild=discord.Object(id=server.id))
-            log.info(f"[SUCCESS]: Synced commands.")
+        bot.tree.sync()
+        log.info(f"[SUCCESS]: Synced commands.")
     except Exception as error:
         log.error(f"[ERROR]: {error}")
 
