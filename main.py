@@ -21,7 +21,7 @@ async def on_ready():
     try:
         log.info(f"[SUCCESS]: {bot.user} is online")
         await bot.tree.sync()
-        await log.info(f"[SUCCESS]: Synced commands.")
+        log.info(f"[SUCCESS]: Synced commands.")
     except Exception as error:
         log.error(f"[ERROR]: {error}")
 
