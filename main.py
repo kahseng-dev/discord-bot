@@ -10,7 +10,9 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 command_prefix = "!"
-bot = Bot(command_prefix, intents=discord.Intents.default())
+intents = discord.Intents.default()
+intents.message_content = True
+bot = Bot(command_prefix, intents=intents)
 
 @bot.event
 async def on_ready():
