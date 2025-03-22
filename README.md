@@ -6,30 +6,23 @@
 
 ## Installation
 
-Install dependencies with 
-`$ pip install -r requirement.txt`
+1. Install dependencies with `$ pip install -r requirement.txt`
 
-Setup these variables in a .env file
-```
-DISCORD_TOKEN=""
-HOST_EMAIL=""
-HOST_PASSWORD=""
-```
+2. Copy `.env.example` to `.env` and start filling in the values as detailed
 
-Discord Permissions
-OAuth2 URL Generator
-```
-- bot
-- applications.commands
-```
+3. Discord Developer portal permissions
 
-Bot Permissions
-```
+- OAuth2 URL Generator
+    - `bot`
+    - `applications.commands`
+
+- Bot Permissions
+    - `Send Messages`
+    - `Use Slash Commands`
+
+- Privileged Gateway Intents
+    - `Message Content Intent`
+
+4. Ensure that the channels your bots have access to allow the bot to have these permissions.
 - Send Messages
-- Use Slash Commands
-```
-
-Privileged Gateway Intents
-```
-- Message Content Intent
-```
+- Use Application Commands
