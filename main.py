@@ -11,6 +11,7 @@ from seleniumbase import SB
 load_dotenv()
 log = logging.getLogger(__name__)
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+WEBDRIVER_BINARY_LOCATION = os.getenv("WEBDRIVER_BINARY_LOCATION")
 HOST_USERNAME = os.getenv("HOST_USERNAME")
 HOST_PASSWORD = os.getenv("HOST_PASSWORD")
 SERVER_ID = os.getenv("SERVER_ID")
@@ -35,7 +36,7 @@ async def start(interaction):
     site_auth = "https://panel.play.hosting/auth/login"
 
     try:
-        with SB(uc=True, headless=True, xvfb=True) as sb:
+        with SB(uc=True, headless=True, xvfb=True, binary_location=WEBDRIVER_BINARY_LOCATION) as sb:
             sb.activate_cdp_mode(site_auth)
             sb.sleep(0.2)
             sb.type('[name="username"]', HOST_USERNAME)
