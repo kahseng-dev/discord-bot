@@ -39,7 +39,26 @@ async def status(interaction):
 
 @bot.tree.command(name = "server-info", description = "Minecraft server information")
 async def server_info(interaction):
-    await interaction.response.send_message(f"[INFO]: Not implemented yet")
+    server_ip = "sanctuary.play.hosting"
+    server_modpack = "Cobblemon Official Modpack [Fabric] 1.21.1"
+    message = (f"""# Server Info
+## How to play
+**Download the Cobblemon Official Modpack [Fabric]! (required)**
+- [modrinth](<https://modrinth.com/modpack/cobblemon-fabric/versions>)
+- [curseforge](<https://www.curseforge.com/minecraft/modpacks/cobblemon-fabric/files/all?page=1&pageSize=20>)
+**Simple Voice Chat supported! (optional)**
+- [modrinth](<https://modrinth.com/plugin/simple-voice-chat/versions>)
+- [curseforge](<https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat/files/all?page=1&pageSize=20>)
+## Discord Commands
+`/start` - if the server is offline, the bot will turn it on
+`/status` - show status of the server
+## Server IP: `{server_ip}`
+currently running: `{server_modpack}`
+
+-# recommended to use Prism Launcher to manage and auto update minecraft instances."""
+    )
+    await interaction.response.send_message(message)
+    log.info(f"[SUCCESS]: Bot has posted server info")
 
 webserver.keep_awake()
 bot.run(DISCORD_TOKEN)
