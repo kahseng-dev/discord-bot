@@ -8,9 +8,11 @@
 
 1. Install dependencies with `$ pip install -r requirement.txt`
 
-2. Copy `.env.example` to `.env` and start filling in the values as detailed
+2. Install a webdriver (example. chrome) with `seleniumbase install chromedriver`
 
-3. Discord Developer portal permissions
+3. Copy `.env.example` to `.env` and start filling in the values as detailed
+
+4. Discord Developer portal permissions
     - OAuth2 URL Generator
         - `bot`
         - `applications.commands`
@@ -20,6 +22,6 @@
     - Privileged Gateway Intents
         - `Message Content Intent`
 
-4. Ensure that the channels your bots have access to allow the bot to have these permissions.
+5. Ensure that the channels your bots have access to allow the bot to have these permissions.
     - `Send Messages`
     - `Use Application Commands`
