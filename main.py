@@ -3,12 +3,10 @@ import discord
 import webserver
 import asyncio
 import logging
-import undetected_chromedriver as uc
 from dotenv import load_dotenv
 from discord import app_commands
 from discord.ext.commands import Bot
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from seleniumbase import SB
 
 load_dotenv()
 log = logging.getLogger(__name__)
@@ -28,53 +26,68 @@ async def on_ready():
         log.info(f"[SUCCESS]: {bot.user} is online")
         await bot.tree.sync()
         log.info(f"[SUCCESS]: Synced commands.")
-    except Exception as error:
-        log.error(f"[ERROR]: {error}")
-
-@bot.tree.command(name = "ping", description = "Checks ping")
-async def ping(interaction):
-    await interaction.response.send_message(f"Pong!")
-    log.info(f"[SUCCESS]: Pong!")
+    except Exception as exception:
+        log.error(f"[ERROR]: {exception}")
 
 @bot.tree.command(name = "start", description = "Starts minecraft server when it is offline")
 async def start(interaction):
-    options = webdriver.ChromeOptions() 
-    options.headless = True
-    options.add_argument("start-maximized")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
+    site = "https://panel.play.hosting/server"
+    site_auth = "https://panel.play.hosting/auth/login"
 
-    driver = uc.Chrome(options=options)
+    try:
+        with SB(uc=True) as sb:
+            sb.activate_cdp_mode(site_auth)
+            sb.sleep(0.2)
+            sb.type('[name="username"]', HOST_USERNAME)
+            sb.type('[name="password"]', HOST_PASSWORD)
+            sb.sleep(0.2)
+            sb.uc_gui_click_captcha()
+            sb.click('button:contains("Login")')
+            sb.sleep(1)
+            sb.goto(f"{site}/{SERVER_ID}")
 
-    website = "https://panel.play.hosting/server"
-    website_auth = "https://panel.play.hosting/auth/login"
+            if sb.is_element_present('span:contains("Server marked as running...")'):
+                log.info(f"[SUCCESS]: Server is online!")
+                await interaction.response.send_message(f"[SUCCESS]: Server is online!")
+            
+            elif sb.is_element_present('span:contains("Server marked as starting..")'):
+                log.info(f"[INFO]: Server is in the process of starting")
+                await interaction.response.send_message(f"[INFO]: Server is in the process of starting")
+                while not sb.is_element_present('span:contains("Server marked as running...")'):
+                    sb.wait_for_element('span:contains("Server marked as running...")')
+                    sb.refresh()
 
-    website_username = driver.find_element(By.NAME, "username")
-    website_password = driver.find_element(By.NAME, "password")
-    website_loginButton = driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/form/div/div/div[4]/button")
+            elif sb.is_element_present("div.xterm-screen") or sb.is_element_present('span:contains("Server marked as offline..'):
+                log.info(f"[INFO]: Terminal is present")
+                log.info(f"[INFO]: Starting server...")
+                await interaction.response.send_message(f"[INFO]: Starting server...")
+                sb.click('button:contains("Start")')
+                while not sb.is_element_present('span:contains("Server marked as running...")'):
+                    sb.wait_for_element('span:contains("Server marked as running...")')
+                    sb.refresh()
+            
+            elif sb.is_element_present('button:contains("Leave Queue")'):
+                log.info(f"[INFO]: Still in queue...")
+                await interaction.response.send_message(f"[INFO]: Still in queue...")
 
-    driver.get(website_auth)
-    website_username.send_keys(HOST_USERNAME)
-    website_password.send_keys(HOST_PASSWORD)
-    website_loginButton.click()
+                while not sb.is_element_present("div.xterm-screen"):
+                    sb.wait_for_element("div.xterm-screen")
+                    sb.refresh()
+            
+            elif sb.is_element_present('button:contains("Join Queue")'):
+                log.info(f"[INFO]: Server is in Limbo")
+                log.info(f"[INFO]: Joining queue...")
+                await interaction.response.send_message(f"[INFO]: Server is in Limbo")
+                await interaction.response.send_message(f"[INFO]: Joining queue...")
+                sb.click('button:contains("Join Queue")')
 
-    driver.execute_script(f"window.open({website}/{SERVER_ID},'_blank');")
-    driver.switch_to.window(driver.window_handles[1])
-
-    server_status = driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[4]/div/div/h2").text
-
-    print(server_status)
-
-    if (server_status == "Server in Limbo"):
-        return
-
-    driver.close()
-    await interaction.response.send_message(f"[INFO]: Not implemented yet")
-
-@bot.tree.command(name = "status", description = "Display minecraft server status")
-async def status(interaction):
-    await interaction.response.send_message(f"[INFO]: Not implemented yet")
-
+                while not sb.is_element_present("div.xterm-screen"):
+                    sb.wait_for_element("div.xterm-screen")
+                    sb.refresh()
+                    
+    except Exception as exception:
+        log.error(f"[ERROR]: {exception}")
+    
 @bot.tree.command(name = "server-info", description = "Minecraft server information")
 async def server_info(interaction):
     server_ip = "sanctuary.play.hosting"
@@ -89,7 +102,6 @@ async def server_info(interaction):
 - [curseforge](<https://www.curseforge.com/minecraft/mc-mods/simple-voice-chat/files/all?page=1&pageSize=20>)
 ## Discord Commands
 `/start` - if the server is offline, the bot will turn it on
-`/status` - show status of the server
 ## Server IP: `{server_ip}`
 currently running: `{server_modpack}`
 
