@@ -35,7 +35,7 @@ async def start(interaction):
     site_auth = "https://panel.play.hosting/auth/login"
 
     try:
-        with SB(uc=True) as sb:
+        with SB(uc=True, headless=True, xvfb=True) as sb:
             sb.activate_cdp_mode(site_auth)
             sb.sleep(0.2)
             sb.type('[name="username"]', HOST_USERNAME)
