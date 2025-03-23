@@ -11,7 +11,6 @@ from seleniumbase import SB
 load_dotenv()
 log = logging.getLogger(__name__)
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-WEBDRIVER_BINARY_LOCATION = os.getenv("WEBDRIVER_BINARY_LOCATION")
 HOST_USERNAME = os.getenv("HOST_USERNAME")
 HOST_PASSWORD = os.getenv("HOST_PASSWORD")
 SERVER_ID = os.getenv("SERVER_ID")
@@ -36,13 +35,12 @@ async def start(interaction):
     site_auth = "https://panel.play.hosting/auth/login"
 
     try:
-        with SB(uc=True, headless=True, xvfb=True, binary_location=WEBDRIVER_BINARY_LOCATION) as sb:
+        with SB(uc=True, headless=True, xvfb=True) as sb:
             sb.activate_cdp_mode(site_auth)
             sb.sleep(0.2)
             sb.type('[name="username"]', HOST_USERNAME)
             sb.type('[name="password"]', HOST_PASSWORD)
             sb.sleep(0.2)
-            sb.uc_gui_click_captcha()
             sb.click('button:contains("Login")')
             sb.sleep(1)
             sb.goto(f"{site}/{SERVER_ID}")
@@ -85,7 +83,7 @@ async def start(interaction):
                 while not sb.is_element_present("div.xterm-screen"):
                     sb.wait_for_element("div.xterm-screen")
                     sb.refresh()
-                    
+
     except Exception as exception:
         log.error(f"[ERROR]: {exception}")
     
