@@ -6,7 +6,7 @@
 
 ## Installation
 
-1. Install dependencies with `$ pip install -r requirement.txt`
+1. Install dependencies with `pip install -r requirements.txt`
 
 2. Install a webdriver (example. chrome) with `seleniumbase install chromedriver`
 
