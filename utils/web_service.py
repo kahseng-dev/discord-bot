@@ -5,7 +5,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    message = "Discord Bot is running"
+    message = "Bot is running"
     return message
 
 def run():
