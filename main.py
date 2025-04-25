@@ -36,8 +36,9 @@ async def on_ready():
     print(f"[✓] Synced slash commands")
 
     print(f"[INFO] Logging into {host_name}...")
+
     await connect_account()
-    await asyncio.sleep(2)
+    get_status()
 
 @bot.command(name='info', aliases=['i'])
 async def info(ctx: commands.Context):
@@ -49,7 +50,7 @@ async def info(ctx: commands.Context):
 async def start(ctx: commands.Context):
     print(f"[INFO] Starting server...")
     message = await ctx.send("Starting server...")
-    start_server()
+    await start_server()
 
 keep_awake()
 bot.run(DISCORD_TOKEN)
